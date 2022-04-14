@@ -1,0 +1,17 @@
+{
+  "name": "group-learning-bot",
+  "version": "1.0.0",
+  "description": "learning bot management for group task",
+  "main": "index.js",
+  "scripts": {
+    "test": "clock-in"
+  },
+  "keywords": [
+    "bot"
+  ],
+  "author": "gricowijaya",
+  "license": "ISC",
+  "dependencies": {
+    "telegraf": "^4.7.0"
+  }
+}
