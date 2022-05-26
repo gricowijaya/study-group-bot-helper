@@ -15,3 +15,10 @@ create table progress (
   progress varchar(250),
   foreign key (id_user) references anggota(id)
 );
+
+create table absen (
+  id int primary key auto_increment,
+  id_anggota int, 
+  clock_in datetime,
+  clock_out datetime
+);
