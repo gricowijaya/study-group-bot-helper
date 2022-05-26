@@ -1,10 +1,40 @@
-const { Telegraf } = require('telegraf')
+const { Telegraf } = require('telegraf');
 const axios = require('axios');
-require('dotenv').config();
+const express = require("express");
 const token = process.env.TELEGRAM_TOKEN;
 const bot = new Telegraf(token);
+const app = express();
+const cors = require('cors');
+const bodyParser = require('body-parser');
+require('dotenv').config();
 
-// help string
+var server = { 
+    port : 3000
+}
+
+app.use(cors());
+app.use(bodyParser.json());
+
+app.listen( server.port , () => console.log(`Server started, listening port: ${server.port}`));
+
+
+// for date and time
+let date_time = new Date();
+// get current date
+// adjust 0 before single digit date
+let date = ("0" + date_time.getDate()).slice(-2);
+// get current month
+let month = ("0" + (date_time.getMonth() + 1)).slice(-2);
+// get current year
+let year = date_time.getFullYear();
+// get current hours
+let hours = date_time.getHours();
+// get current minutes
+let minutes = date_time.getMinutes();
+// get current seconds
+let seconds = date_time.getSeconds();
+
+// store help information
 
 const helpMessage = `
 Perintah_perintah yang dimiliki oleh bot ini.
@@ -16,29 +46,8 @@ list_out -> melihat siapa saja yang belum absen
 progress _> melakukan input progress
 list_progress -> melakukan daftar dari masing-masing progress
 `
-
-//method for invoking helpMessage command
-
-bot.help(ctx => { 
-    ctx.reply(helpMessage);
-});
-
-
-// method for invoking clock_in command
-bot.command('clock_in', ctx => {
-    console.log(ctx.from)
-    bot.telegram.sendMessage(ctx.chat.id, 'Anda Berhasil Clock In', {
-    })
-});
-
-// method for invoking clock_out command
-bot.command('clock_out', ctx => {
-    console.log(ctx.from)
-    bot.telegram.sendMessage(ctx.chat.id, 'Anda Berhasil Clock Out', {
-    })
-});
-
 // method for invoking list_in command
+
 bot.command('list_in', ctx => {
     console.log(ctx.from)
     bot.telegram.sendMessage(ctx.chat.id, 'Daftar Absen anggota yang hadir', {
@@ -46,6 +55,7 @@ bot.command('list_in', ctx => {
 });
 
 // method for invoking list_out command
+
 bot.command('list_out', ctx => {
     console.log(ctx.from)
     bot.telegram.sendMessage(ctx.chat.id, 'Daftar Absen anggota yang tidak hadir', {
@@ -117,7 +127,6 @@ const requestLocationKeyboard = {
             ["Cancel"]
         ]
     }
-
 }
 
 bot.command('quit', (ctx) => {
@@ -126,6 +135,68 @@ bot.command('quit', (ctx) => {
 
   // Using context shortcut
   ctx.leaveChat()
+})
+
+// menu button list after hearing menu
+bot.hears('menu', ctx => {
+    console.log(ctx.from)
+    let buttonHint = `Silahkan pilih tombol dibawah ini untuk melakukan melakukan Fitur Bot`;
+    ctx.deleteMessage();
+    bot.telegram.sendMessage(ctx.chat.id, buttonHint, {
+        reply_markup: {
+            inline_keyboard: [
+                [{
+                        text: "Clock In",
+                        callback_data: 'clock_in'
+                    },
+                    {
+                        text: "Clock Out",
+                        callback_data: 'clock_out'
+                    },
+                    {
+                        text: "Hint",
+                        callback_data: 'hint'
+                    },
+                ],
+
+            ]
+        }
+    })
+})
+
+//method that returns image of a dog
+
+bot.action('clock_in', ctx => {
+    bot.telegram.sendPhoto(ctx.chat.id, {
+        source: "res/have_fun.jpg"
+    })
+
+    bot.telegram.sendMessage(ctx.chat.id, `Anda Berhasil Clock In pada ${year} - ${month} - ${date}  ${hours} : ${minutes} : ${seconds}`, {
+    })
+})
+
+// method for clock_out
+
+bot.action('clock_out', ctx => {
+
+// prints date & time in YYYY-MM-DD HH:MM:SS format
+    console.log(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds);
+    bot.telegram.sendPhoto(ctx.chat.id, {
+        source: "res/thank_you.jpg"
+    })
+
+    bot.telegram.sendMessage(ctx.chat.id, `Anda Berhasil Clock Out pada ${year} - ${month} - ${date}  ${hours} : ${minutes} : ${seconds}`, {
+    })
+
+})
+
+//method for invoking hint command returns helpMessage
+
+bot.action('hint', ctx => {
+    bot.help(ctx => { 
+        ctx.reply(helpMessage);
+    });
+
 })
 
 bot.launch();
