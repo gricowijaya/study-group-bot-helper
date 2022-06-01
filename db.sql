@@ -1,3 +1,5 @@
+drop database if exists bot_database;
+
 create database bot_database; 
 
 use bot_database;
@@ -6,14 +8,14 @@ create table anggota (
   id int primary key auto_increment, 
   nama varchar(30),
   status int,
-  phone
+  phone varchar(15)
 );
 
 create table progress (
   id int primary key auto_increment,
-  id_user int,
+  id_anggota int,
   progress varchar(250),
-  foreign key (id_user) references anggota(id)
+  foreign key (id_anggota) references anggota(id)
 );
 
 create table absen (
