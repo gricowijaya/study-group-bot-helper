@@ -36,6 +36,8 @@ list_out -> melihat siapa saja yang belum absen
 progress _> melakukan input progress
 list_progress -> melakukan daftar dari masing-masing progress
 `
+const pattern = [`help`, `hint`, `masuk`, `keluar`, `clock`, `in`, `out`, `list_progress`];
+
 // for date and time
 let date_time = new Date();
 // get current date
@@ -61,6 +63,14 @@ bot.command('start', ctx => {
     })
 })
 
+// method for invoking hint command returns helpMessage
+bot.command('help', ctx => {
+    bot.help(ctx => { 
+        ctx.reply(helpMessage);
+    });
+})
+
+
 // method for getting the Presence 
 bot.command('list_in', ctx => {
   db.query(
@@ -75,7 +85,6 @@ bot.command('list_in', ctx => {
       // console.log(ctx.from)
       // console.log(fields); // fields contains extra meta data about results, if available
   })
-
 });
 
 // method for invoking list_out command
@@ -95,7 +104,7 @@ bot.command('list_out', ctx => {
 // method for invoking progress command
 bot.command('progress', ctx => {
   db.query(
-    'SELECT `anggota`.nama, `progress`.progress FROM `progress` join `anggota` ON `progress`.id_anggota = `anggota`.id WHERE `status` = 0', (err, results, fields) => {
+    'INSERT INTO `anggota`.nama, `progress`.progress FROM `progress` join `anggota` ON `progress`.id_anggota = `anggota`.id WHERE `status` = 0', (err, results, fields) => {
       if(err) throw err;
       if(results == null) return 'tidak terdapat data';
       console.log(results); // results contains rows returned by server
@@ -244,14 +253,6 @@ bot.action('clock_out', ctx => {
         // console.log(fields); // fields contains extra meta data about results, if available
     })
 
-
-})
-
-// method for invoking hint command returns helpMessage
-bot.command('hint', ctx => {
-    bot.help(ctx => { 
-        ctx.reply(helpMessage);
-    });
 
 })
 
