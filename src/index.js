@@ -5,7 +5,7 @@ require('dotenv').config();
 const token = process.env.TELEGRAM_TOKEN;
 // const token = "5211773992:AAFNRjRUi7wKAHReCoIHhkQ0t2sKvNFeFbE";
 const { Telegraf } = require('telegraf');
-const axios = require('axios');
+// const axios = require('axios');
 const express = require("express");
 const bot = new Telegraf(token);
 const app = express();
@@ -14,8 +14,6 @@ const bodyParser = require('body-parser');
 
 // import database query
 const db = require ('./database.js');
-const botcmd = require ('./botcmd.js');
-
 
 // port for deployment server 
 const server = { port : 3000 }
@@ -74,7 +72,7 @@ bot.command('help', ctx => {
 // method for getting the Presence 
 bot.command('list_in', ctx => {
   db.query(
-    data = 'SELECT nama FROM `anggota` WHERE `status` = 1', (err, results, fields) => {
+    'SELECT nama FROM `anggota` WHERE `status` = 1', (err, results, fields) => {
       if(err) throw err;
       if(results == null) return 'tidak terdapat data';
       console.log(JSON.stringify(results)); // results contains rows returned by server

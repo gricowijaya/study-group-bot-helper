@@ -1,23 +1,6 @@
 // use mysql2 instead of mysql
 const mysql = require('mysql2');
 
-// const dbpool = mysql.createPool({
-//   host: process.env.MYSQL_HOST,
-//   user: process.env.MYSQL_USER,
-//   password: process.env.MYSQL_PASSWORD,
-//   database: process.env.DATABASE_NAME,
-//   waitForConnections: true,
-//   connectionLimit: process.env.CONNECTION_LIMIT, 
-//   queueLimit: process.env.QUEUE_LIMIT
-// });
-
-// database connection using environment variable
-// const db = mysql.createConnection({
-//   host: process.env.MYSQL_HOST,
-//   user: process.env.MYSQL_USER,
-//   password: process.env.MYSQL_PASSWORD,
-//   database: process.env.DATABASE_NAME,
-// });
 
 const db = mysql.createConnection({
   host: 'localhost',
@@ -34,9 +17,7 @@ db.connect(function(err) {
 });
 
 // string variable for selecting the anggota 
-let queryAnggota = 'SELECT nama FROM `anggota` WHERE `status` = '
-let anggotaPresence = '1';
-let anggotaAbsence = '0';
+
 
 // get data from tb_anggota
 // function presence() { 
@@ -55,20 +36,6 @@ let anggotaAbsence = '0';
 
 
 // console.log(`Daftar kehadiran dari absensi anda hari ini adalah ${Object.values(presence)}`);
-
-// get data from tb_anggota
-let absence =  {
-nama : 
-  db.query(
-    queryAnggota + anggotaAbsence, (err, results, fields) => {
-      if(err) throw err;
-      if(results == null) return 'tidak terdapat data';
-      console.log(results); // results contains rows returned by server
-      // console.log(fields); // fields contains extra meta data about results, if available
-      return results
-  })
-} 
-
 // console.log(`Daftar ketidakhadiran dari absensi anda hari ini adalah ${absence}`)
 
 //   dataStore = [];
@@ -84,4 +51,22 @@ nama :
 // });
 
 
-module.exports =  db;
+
+
+// const dbpool = mysql.createPool({
+//   host: process.env.MYSQL_HOST,
+//   user: process.env.MYSQL_USER,
+//   password: process.env.MYSQL_PASSWORD,
+//   database: process.env.DATABASE_NAME,
+//   waitForConnections: true,
+//   connectionLimit: process.env.CONNECTION_LIMIT, 
+//   queueLimit: process.env.QUEUE_LIMIT
+// });
+
+// database connection using environment variable
+// const db = mysql.createConnection({
+//   host: process.env.MYSQL_HOST,
+//   user: process.env.MYSQL_USER,
+//   password: process.env.MYSQL_PASSWORD,
+//   database: process.env.DATABASE_NAME,
+// });
